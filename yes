@@ -127,7 +127,7 @@ function F3X.Edit(objects, properties)
                 if properties.CFrame ~= nil then
                     coroutine.wrap(serverEndpoint.InvokeServer)(serverEndpoint, "SyncMove", {{Part = object, CFrame = properties.CFrame}})
                 end
-                wait(5)
+                wait(3)
             elseif object:IsA("SpecialMesh") then
                 properties.Part = object.Parent
                 coroutine.wrap(serverEndpoint.InvokeServer)(serverEndpoint, "SyncMesh", {properties})
@@ -158,6 +158,7 @@ function F3X.new(className, parent)
     for property,value in pairs(defaultProperties) do
         properties[property] = value
     end
+    wait(3)
     local object = serverEndpoint:InvokeServer("CreatePart", className, CFrame.new(), parent)
     F3X.Edit(object, defaultProperties)
     return F3X.Object(object)
