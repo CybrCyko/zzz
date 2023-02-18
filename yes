@@ -60,18 +60,28 @@ function F3X.Object(object)
     end
     proxy.Object = object
     if object:IsA("BasePart") then
-wait(5)
         function proxy:AddMesh() local mesh = serverEndpoint:InvokeServer("CreateMeshes", {{Part = object}})[1] return F3X.Object(mesh) end
+        wait(1)
         function proxy:AddDecal() local decal = serverEndpoint:InvokeServer("CreateTextures", {{Part = object, Face = Enum.NormalId.Front, TextureType = "Decal"}})[1] return F3X.Object(decal) end
+        wait(1)
         function proxy:AddTexture() local texture = serverEndpoint:InvokeServer("CreateTextures", {{Part = object, Face = Enum.NormalId.Front, TextureType = "Texture"}})[1] return F3X.Object(texture) end
-        function proxy:AddSmoke() local smoke = serverEndpoint:InvokeServer("CreateDecorations", {{Part = object, DecorationType = "Smoke"}})[1] return F3X.Object(smoke) end
+       wait(1)
+       function proxy:AddSmoke() local smoke = serverEndpoint:InvokeServer("CreateDecorations", {{Part = object, DecorationType = "Smoke"}})[1] return F3X.Object(smoke) end
+        wait(21
         function proxy:AddFire() local fire = serverEndpoint:InvokeServer("CreateDecorations", {{Part = object, DecorationType = "Fire"}})[1] return F3X.Object(fire) end
-        function proxy:AddSparkles() local sparkles = serverEndpoint:InvokeServer("CreateDecorations", {{Part = object, DecorationType = "Sparkles"}})[1] return F3X.Object(sparkles) end
+        wait(1)
+        funcwait(2)tion proxy:AddSparkles() local sparkles = serverEndpoint:InvokeServer("CreateDecorations", {{Part = object, DecorationType = "Sparkles"}})[1] return F3X.Object(sparkles) end
+        wait(1)
         function proxy:AddSpotLight() local spotlight = serverEndpoint:InvokeServer("CreateLights", {{Part = object, LightType = "SpotLight"}})[1] return F3X.Object(spotlight) end
+        wait(1)
         function proxy:AddPointLight() local pointlight = serverEndpoint:InvokeServer("CreateLights", {{Part = object, LightType = "PointLight"}})[1] return F3X.Object(pointlight) end
+        wait(1)
         function proxy:AddSurfaceLight() local pointlight = serverEndpoint:InvokeServer("CreateLights", {{Part = object, LightType = "surfacelight"}})[1] return F3X.Object(surfacelight) end
+        wait(1)
         function proxy:WeldTo(parts) if type(parts) ~= "table" then parts = {parts} end serverEndpoint:InvokeServer("CreateWelds", parts, object) end
+        wait(1)
         function proxy:MakeJoints() local parts = {} for _,part in pairs(object:GetTouchingParts()) do table.insert(parts, part) end serverEndpoint:InvokeServer("CreateWelds", parts, object) end
+        wait(1)
         function proxy:BreakJoints() local welds = {} for _,weld in pairs(workspace:GetDescendants()) do if weld:IsA("Weld") and (weld.Part0 == object or weld.Part1 == object) then table.insert(welds, weld) end end serverEndpoint:InvokeServer("RemoveWelds", welds, object) end
     end
     function proxy:Destroy() serverEndpoint:InvokeServer("Remove", {object}) end
@@ -159,7 +169,6 @@ function F3X.new(className, parent)
     for property,value in pairs(defaultProperties) do
         properties[property] = value
     end
-    wait(5)
     local object = serverEndpoint:InvokeServer("CreatePart", className, CFrame.new(), parent)
     F3X.Edit(object, defaultProperties)
     return F3X.Object(object)
