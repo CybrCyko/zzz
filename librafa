@@ -1,0 +1,538 @@
+-- PARTS MOVEMENT
+
+function PlayerGoto(X,Y,Z,Speed,CanAnchor,Mode,Player,Timeout)
+	if Player.ClassName ~= "Player" then
+		error(Player.ClassName .. " Isnt A Valid Player Type (Use The Player And Not The Model Of The Player)")
+	end
+	local MainPart = Player.Character.HumanoidRootPart
+	local SettedMode = 0
+	local SettedSpeed = 0
+	local TimeoutTime = 0
+	local SettedCanAnchor = false
+	local SettedCanTimeout = false 
+	if Mode == "nP" or Mode == 1 then
+		SettedMode = 1
+	elseif Mode == "BODYPOSITION" or Mode == 2 then
+		SettedMode = 2
+	else
+		error('Invalid Mode. Use ["TP"(1) "BODYPOSITION"(2)] () = Code, "" = Name ')
+	end
+	if CanAnchor == true then
+		SettedCanAnchor = true
+	elseif CanAnchor == false then
+		SettedCanAnchor = false
+	else 
+		warn('Did You Forget To Set The "CanAnchor" Property As True Or False? The Current Mode Is ' .. tostring(SettedCanAnchor))
+	end
+	if type(Speed) == "number" then
+		SettedSpeed = tonumber(Speed)
+	else
+		warn('Did You Forget To Set The Speed As A Int Value? The Current Speed Is ' .. tostring(SettedSpeed))
+	end
+	if Timeout == nil or Timeout == 0 then
+		SettedCanTimeout = false
+	elseif Timeout >= 1 then
+		TimeoutTime = tonumber(Timeout)
+		SettedCanTimeout = true
+	end
+	local TempBodyPos = nil
+	if SettedMode == 2 then
+		TempBodyPos = Instance.new("BodyPosition",MainPart)
+		TempBodyPos.D = 50
+		TempBodyPos.P = 1000
+		TempBodyPos.MaxForce = Vector3.new(math.huge,math.huge,math.huge)
+		TempBodyPos.Position = MainPart.Position
+	end
+	if SettedCanAnchor == true then
+		MainPart.Anchored = true
+	elseif SettedCanAnchor == false then
+		MainPart.Anchored = false
+	end
+	if SettedMode == 2 and SettedCanAnchor == true then
+		warn("Mode 2(BODYPOSITION) Cant Be Used With Anchor On")
+		MainPart.Anchored = false
+	end
+	local XAddDone = false
+	local XSubDone = false
+	local YAddDone = false
+	local YSubDone = false
+	local ZAddDone = false
+	local ZSubDone = false
+	local ManualKill = true
+	coroutine.resume(coroutine.create(function()
+		local StarterVec3 = MainPart.Position
+		local AdditionAxis = Vector3.new(Speed,0,0)
+		while ManualKill == true do
+			wait(0.0001)
+			if SettedMode == 1 then
+				if SettedCanAnchor == true then
+					StarterVec3 = MainPart.Position
+				end
+				StarterVec3 = StarterVec3 + AdditionAxis
+				MainPart.CFrame = CFrame.new(0,0,0) + StarterVec3
+			elseif SettedMode == 2 then
+				TempBodyPos.Position = TempBodyPos.Position + AdditionAxis
+			end
+			if MainPart.Position.X >= X then XAddDone = true break end
+		end
+	end))
+	coroutine.resume(coroutine.create(function()
+		local StarterVec3 = MainPart.Position
+		local AdditionAxis = Vector3.new(-Speed,0,0)
+		while ManualKill == true do
+			wait(0.0001)
+			if SettedMode == 1 then
+				if SettedCanAnchor == true then
+					StarterVec3 = MainPart.Position
+				end
+				StarterVec3 = StarterVec3 + AdditionAxis
+				MainPart.CFrame = CFrame.new(0,0,0) + StarterVec3
+			elseif SettedMode == 2 then
+				TempBodyPos.Position = TempBodyPos.Position + AdditionAxis
+			end
+			if MainPart.Position.X <= X then XSubDone = true break end
+		end
+	end))
+	coroutine.resume(coroutine.create(function()
+		local StarterVec3 = MainPart.Position
+		local AdditionAxis = Vector3.new(0,Speed,0)
+		while ManualKill == true do
+			wait(0.0001)
+			if SettedMode == 1 then
+				if SettedCanAnchor == true then
+					StarterVec3 = MainPart.Position
+				end
+				StarterVec3 = StarterVec3 + AdditionAxis
+				MainPart.CFrame = CFrame.new(0,0,0) + StarterVec3
+			elseif SettedMode == 2 then
+				TempBodyPos.Position = TempBodyPos.Position + AdditionAxis
+			end
+			if MainPart.Position.Y >= Y then YAddDone = true break end
+		end
+	end))
+	coroutine.resume(coroutine.create(function()
+		local StarterVec3 = MainPart.Position
+		local AdditionAxis = Vector3.new(0,-Speed,0)
+		while ManualKill == true do
+			wait(0.0001)
+			if SettedMode == 1 then
+				if SettedCanAnchor == true then
+					StarterVec3 = MainPart.Position
+				end
+				StarterVec3 = StarterVec3 + AdditionAxis
+				MainPart.CFrame = CFrame.new(0,0,0) + StarterVec3
+			elseif SettedMode == 2 then
+				TempBodyPos.Position = TempBodyPos.Position + AdditionAxis
+			end
+			if MainPart.Position.Y <= Y then YSubDone = true break end
+		end
+	end))
+	coroutine.resume(coroutine.create(function()
+		local StarterVec3 = MainPart.Position
+		local AdditionAxis = Vector3.new(0,0,Speed)
+		while ManualKill == true do
+			wait(0.0001)
+			if SettedMode == 1 then
+				if SettedCanAnchor == true then
+					StarterVec3 = MainPart.Position
+				end
+				StarterVec3 = StarterVec3 + AdditionAxis
+				MainPart.CFrame = CFrame.new(0,0,0) + StarterVec3
+			elseif SettedMode == 2 then
+				TempBodyPos.Position = TempBodyPos.Position + AdditionAxis
+			end
+			if MainPart.Position.Z >= Z then ZAddDone = true break end
+		end
+	end))
+	coroutine.resume(coroutine.create(function()
+		local StarterVec3 = MainPart.Position
+		local AdditionAxis = Vector3.new(0,0,-Speed)
+		while ManualKill == true do
+			wait(0.0001)
+			if SettedMode == 1 then
+				if SettedCanAnchor == true then
+					StarterVec3 = MainPart.Position
+				end
+				StarterVec3 = StarterVec3 + AdditionAxis
+				MainPart.CFrame = CFrame.new(0,0,0) + StarterVec3
+			elseif SettedMode == 2 then
+				TempBodyPos.Position = TempBodyPos.Position + AdditionAxis
+			end
+			if MainPart.Position.Z <= Z then ZSubDone = true break end
+		end
+	end))
+	local KeepLoopingLastLoop = true
+	if SettedCanTimeout == true then
+		coroutine.resume(coroutine.create(function()
+			wait(TimeoutTime)
+			ManualKill = false
+			KeepLoopingLastLoop = false
+			warn("TIMEDOUT")
+		end))
+	end
+	while KeepLoopingLastLoop == true do
+		wait(0.0001)
+		if XSubDone == true and XAddDone == true and YSubDone == true and YAddDone == true and ZSubDone == true and ZAddDone == true then MainPart.Anchored = false break end
+	end
+	if TempBodyPos ~= nil then
+		TempBodyPos:Destroy()
+	end
+	MainPart.Anchored = false
+end
+
+function SimplePathfinding(StartPos,EndPos)
+	local PathFindingService = game:GetService("PathfindingService")
+	local Path = nil
+	local PosTable = {}
+
+	Path = PathFindingService:FindPathAsync(StartPos,EndPos)
+	if Path.Status == Enum.PathStatus.NoPath then
+		return false
+	end
+	for _,i in ipairs(Path:GetWaypoints()) do
+		table.insert(PosTable,i.Position)
+	end
+	return PosTable
+end
+
+function CustomRound(Num,Amount)
+return math.round(Num/Amount)*Amount
+end
+
+function SimpleTween(Part,CFTarget,Speed)
+	local TweenService = game:GetService("TweenService")
+	local Time = (Part.Position - CFTarget.Position).magnitude/Speed
+	local FinishedTween = false
+	local TweenFinishedEvent = nil
+	local TweenBase = TweenService:Create(Part,TweenInfo.new(Time,Enum.EasingStyle.Linear),{CFrame = CFTarget})
+	TweenBase:Play()
+	TweenFinishedEvent = TweenBase.Completed:Connect(function()
+		FinishedTween = true
+	end) 
+	repeat wait(0.01) until FinishedTween == true
+	TweenFinishedEvent:Disconnect()
+end
+
+function AdvancedTween(Part,CFTarget,Speed,Noclip,Platform)
+	local TweenUpdaterEvent = nil
+	local CancelTween = false
+	local CTDEvent = nil
+	local LastPlat = nil 
+	TweenUpdaterEvent = game:GetService("RunService").RenderStepped:Connect(function()
+		pcall(function()
+			if Noclip == true then
+				game:GetService("Players").LocalPlayer.Character.Humanoid:ChangeState(11)
+			end
+		end)
+		pcall(function()
+			if LastPlat then
+				LastPlat:Destroy()
+			end
+			if Platform == true then
+				LastPlat = Instance.new("Part",game:GetService("Players").LocalPlayer.Character)
+				LastPlat.Anchored = true
+				LastPlat.Size = Vector3.new(10,1,10)
+				LastPlat.Position = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position + Vector3.new(0,-3,0)
+			end
+		end)
+	end)
+	pcall(function()
+		CTDEvent = game:GetService("Players").LocalPlayer.Character.Humanoid.Died:Connect(function()
+			CancelTween = true
+		end)
+	end)
+	local TweenService = game:GetService("TweenService")
+	local Time = (Part.Position - CFTarget.Position).magnitude/Speed
+	local FinishedTween = false
+	local TweenFinishedEvent = nil
+	local TweenBase = TweenService:Create(Part,TweenInfo.new(Time,Enum.EasingStyle.Linear),{CFrame = CFTarget})
+	TweenBase:Play()
+	TweenFinishedEvent = TweenBase.Completed:Connect(function()
+		FinishedTween = true
+	end) 
+	repeat wait(0.01) until FinishedTween == true or CancelTween == true
+	TweenFinishedEvent:Disconnect()
+	pcall(function()
+		TweenUpdaterEvent:Disconnect()
+	end)
+	if LastPlat then
+		LastPlat:Destroy()
+	end
+	pcall(function()
+		CTDEvent:Disconnect()
+	end)
+end
+
+
+
+
+function RemeshBlock(Part,Division)
+	local MapReg = Part
+	local ExtraOffset = 0.0001
+	local BoundsSize = MapReg.Size
+	local EndOffset = Vector3.new(0,0,0)
+	if BoundsSize.X <= 0 then
+		EndOffset = EndOffset + Vector3.new(BoundsSize.X,0,0)
+		BoundsSize = Vector3.new(BoundsSize.X*-1,BoundsSize.Y,BoundsSize.Z)
+	end
+	if BoundsSize.Y <= 0 then
+		EndOffset = EndOffset + Vector3.new(0,BoundsSize.Y,0)
+		BoundsSize = Vector3.new(BoundsSize.X,BoundsSize.Y*-1,BoundsSize.Z)
+	end 
+	if BoundsSize.Z <= 0 then
+		EndOffset = EndOffset + Vector3.new(0,0,BoundsSize.Z)
+		BoundsSize = Vector3.new(BoundsSize.X,BoundsSize.Y,BoundsSize.Z*-1)
+	end
+	local function Lerp(Min,Max,InterpolationVal)
+		return Min + (Max-Min) * InterpolationVal
+	end
+	local function Rotate(NewCF,PivotPoint,Part,InitState)
+		local RotationCFrame = NewCF
+		local RelativeTo = PivotPoint * RotationCFrame
+		local Offset = PivotPoint:ToObjectSpace(InitState)
+		local MainCFrame = RelativeTo * Offset
+		return (MainCFrame)
+	end
+	local FramesTable = {}
+	local PerfectDivision = Vector3.new(BoundsSize.X/Division,BoundsSize.Y/Division,BoundsSize.Z/Division)
+	local X,Y,Z = 0,0,0
+	local OffSettedPos = ((MapReg.Size/Vector3.new(2,2,2))-(PerfectDivision/Vector3.new(2,2,2)))
+	while true do
+		if X+ExtraOffset >= BoundsSize.X then
+			X = 0
+			Y = Y + PerfectDivision.Y
+		end
+		if Y+ExtraOffset >= BoundsSize.Y then
+			Y = 0
+			Z = Z + PerfectDivision.Z
+		end
+		if Z+ExtraOffset >= BoundsSize.Z then
+			break
+		end
+		local Pos = OffSettedPos - Vector3.new(X,Y,Z) 
+		table.insert(FramesTable,{Size = PerfectDivision,CF = Rotate(MapReg.CFrame,MapReg.CFrame,Part,CFrame.new(Pos))})
+		X = X + PerfectDivision.X
+	end
+	return FramesTable
+end
+
+
+
+
+
+-- PATH FINDING
+function AdvancedPathfinding(StartPos,EndPos,PartSizeX,PartSizeY,CanJump)
+	local PathFindingService = game:GetService("PathfindingService")
+	local Path = nil
+	local PosTable = {}
+	Path = PathFindingService:CreatePath({AgentRadius=PartSizeX,AgentHeight=PartSizeY,AgentCanJump=CanJump})
+	Path:ComputeAsync(StartPos,EndPos)
+	for _,i in ipairs(Path:GetWaypoints()) do
+		table.insert(PosTable,i.Position)
+	end
+	return PosTable--Path:GetWaypoints()
+end
+
+function GetBestWaypoint(ShowPath,StartPos,EndPos,PartSizeX,PartSizeY,MaxAttempts,MaxOffset,CanJump)
+	local PathTrans = 0
+	if ShowPath == true then
+		PathTrans = 0.5
+	elseif ShowPath == false then
+		PathTrans = 1
+	end
+	local MinSize = math.huge
+	local TempTable = {}
+	local BestWaypoints = {}
+	local function DestroyTable(Table)
+		for _,i in ipairs(Table) do
+			pcall(function()
+				i:Destroy()
+			end)
+		end
+		Table = {}
+	end
+
+	for _=1,MaxAttempts do
+		local MaxOffSetStart = Vector3.new(math.random(0,MaxOffset * 1000) / (MaxOffset * 1000),math.random(0,MaxOffset * 1000) / (MaxOffset * 1000),math.random(0,MaxOffset * 1000) / (MaxOffset * 1000))
+		local MinOffSetStart = Vector3.new(math.random(0,MaxOffset * 1000) / (MaxOffset * 1000),math.random(0,MaxOffset * 1000) / (MaxOffset * 1000),math.random(0,MaxOffset * 1000) / (MaxOffset * 1000))
+		local waypoints = AdvancedPathfinding(StartPos + MaxOffSetStart,EndPos + MinOffSetStart,PartSizeX,PartSizeY,CanJump)
+		local Table = {}
+		local TotalDist = 0
+		for i, v in ipairs(waypoints) do
+			local Part = Instance.new("Part")
+			Part.Position = v
+			Part.Anchored = true
+			Part.Transparency = PathTrans
+			Part.Size = Vector3.new(1, 1, 1)
+			Part.Parent = game:GetService("Workspace")
+			table.insert(Table,Part)
+			if (i > 1) then
+				local lastWaypoint = waypoints[i - 1]
+				local dist = (v - lastWaypoint).Magnitude
+				local Part2 = Instance.new("Part")
+				local Box = Instance.new("BoxHandleAdornment",Part2)
+				Box.AlwaysOnTop = true
+				Part2.Anchored = true
+				Part2.Transparency = PathTrans
+				Part2.Material = Enum.Material.Neon
+				Part2.Color = Color3.fromRGB(255,0,0)
+				Box.Color3 = Part2.Color
+				Box.ZIndex = 5
+				Box.Adornee = Part2
+				Box.Transparency = PathTrans
+				table.insert(Table,Part2)
+				table.insert(Table,Box)
+				TotalDist = TotalDist + dist
+				Part2.Size = Vector3.new(0.5, 0.5, dist)
+				Box.Size = Part2.Size
+				Part2.CFrame = CFrame.new(lastWaypoint, v) * CFrame.new(0, 0, dist / -2)
+				Part2.Parent = game:GetService("Workspace")
+			end
+		end
+		wait(0.01)
+		if TotalDist < MinSize and TotalDist >= 0.1 then
+			print(TotalDist)
+			DestroyTable(TempTable)
+			MinSize = TotalDist
+			TempTable = Table
+			BestWaypoints = waypoints
+		else
+			DestroyTable(TempTable)
+			pcall(function()
+				DestroyTable(Table)
+			end)
+		end
+	end
+	DestroyTable(TempTable)
+	return BestWaypoints,MinSize
+end
+
+-- MATH FUNCTIONS
+function CalculatePercentage(CurrentValue,TargtedValue)
+	return CurrentValue / TargtedValue * 100
+end
+
+function CalculateMidpoint(...)
+	local TotalVal = 0
+	for _,i in ipairs({...}) do TotalVal = TotalVal + i end
+	return TotalVal / 2
+end
+function Calculate2IntMidPoint(i,x)
+	local Total = i + x
+	local Finished = Total / 2
+	return(Finished)
+end
+function CheckVectorOffset(CP,TP,Max)
+	if CP.X + Max < TP.X then
+		if CP.Y + Max < TP.Y then
+			if CP.Z + Max < TP.Z then
+				if CP.X - Max > TP.X then
+					if CP.Y - Max > TP.Y then
+						if CP.Z - Max > TP.Z then
+							return true
+						end
+					end
+				end
+			end
+		end
+	end
+	return false
+end
+function SlicePath(StartPoint,EndPoint,DetailSkipRate)
+	local function Lerp(Min,Max,InterpolationVal)
+		return Min + (Max-Min) * InterpolationVal
+	end
+	local Dist = (StartPoint-EndPoint).Magnitude
+	local Frame = 0
+	local Frames = {}
+	while Frame < 1 do
+		Frame = Frame + (DetailSkipRate/Dist)
+		local X = Lerp(StartPoint.X,EndPoint.X,Frame)
+		local Y = Lerp(StartPoint.Y,EndPoint.Y,Frame)
+		local Z = Lerp(StartPoint.Z,EndPoint.Z,Frame)
+		table.insert(Frames,Vector3.new(X,Y,Z))
+	end
+	return Frames
+
+end
+function CalculateCFrameCenter(PartsTable)
+	local Return = Vector3.new(0,0,0)
+	for _,i in ipairs(PartsTable) do
+		Return = Return + i.CFrame.Position
+	end
+	return CFrame.new(Return)
+end
+function CalculateVector3Center(Vec3Table)
+	local V3 = Vector3.new(0,0,0)
+	for _,i in ipairs(Vec3Table) do
+		V3 = V3 + i
+	end
+	return V3/2
+end
+function Lerp(Min,Max,InterpolationVal)
+	return Min + (Max-Min) * InterpolationVal
+end
+
+function Vector3ToVector2(V3)
+	local Camera = game:GetService("Workspace").CurrentCamera
+	local Vector, OnScreen = Camera:WorldToScreenPoint(V3)
+	local Depth = Vector.Z
+	return Vector.X,Vector.Y,Depth,OnScreen
+end
+function AngleToV2Force(Force,AX,AY)
+	local ValueOfPI = math.pi
+	local XCom = math.cos(AX*ValueOfPI/180)*Force
+	local YCom = math.sin(AY*ValueOfPI/180)*Force
+	return XCom,YCom
+end
+function GRName()
+	local StringData = ""
+	for Attempt=1,math.random(100,1000) do
+		local UTF8Char = utf8.char(math.random(0,math.random(1000,1049599)))
+		local NormalInt = ""
+		if math.random(0,1) == 1 then
+			NormalInt = math.random(0,9)
+		end
+		StringData = StringData .. tostring(NormalInt) .. tostring(UTF8Char)
+	end
+	return StringData
+end
+
+function V2ToMagnitude(X,Y)
+	return math.sqrt((X^2)+(Y^2))
+end
+function GenString(len,UTF8Chars) -- UTF-8 Max Chars Customization 1049599
+	local StringData = ""
+	for Attempt=1,len do
+		local UTF8Char = utf8.char(math.random(0,UTF8Chars))
+		local NormalInt = math.random(0,9)
+		StringData = StringData .. tostring(NormalInt) .. tostring(UTF8Char)
+	end
+	return StringData
+end
+function FindOnString(String,Target)
+	local TargetTable = {}
+	for _,i in ipairs(string.split(Target,"")) do
+		table.insert(TargetTable,i)
+	end
+	local Matched = ""
+	local SplittedMain = string.split(String,"")
+
+	for MainAdrs,i in ipairs(SplittedMain) do
+		local ToCompare = ""
+		local StartAdress = 0
+		local EndAdress = 0
+		StartAdress = MainAdrs
+		for MAdrs=1,#TargetTable do
+			local Key = SplittedMain[MainAdrs+MAdrs]
+			ToCompare = ToCompare .. Key
+			EndAdress = MainAdrs+MAdrs
+		end
+		if ToCompare == Target then
+			return ToCompare,StartAdress,EndAdress
+		end
+
+
+	end
+
+end
